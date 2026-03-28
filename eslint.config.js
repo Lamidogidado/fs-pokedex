@@ -15,6 +15,15 @@ module.exports = [
   },
   js.configs.recommended,
   {
+    files: ['jest.setup.js'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        ...globals.jest
+      }
+    }
+  },
+  {
     files: ['app.js'],
     languageOptions: {
       ecmaVersion: 2018,
