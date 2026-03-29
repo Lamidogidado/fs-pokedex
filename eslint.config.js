@@ -5,12 +5,15 @@ const globals = require('globals')
 
 module.exports = [
   {
+    // These files will be completely skipped by ESLint
     ignores: [
       'webpack.config.js',
       'eslint.config.js',
       '.eslintrc.js',
       'node_modules/**',
-      'dist/**'
+      'dist/**',
+      'playwright.config.js', // Added this
+      'e2e-tests/**'          // Added this
     ]
   },
   js.configs.recommended,
