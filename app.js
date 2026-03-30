@@ -13,7 +13,7 @@ app.get('/version', (req, res) => {
 
 // Add a health check (good practice for CI/CD)
 app.get('/health', (req, res) => {
-  res.send('ok')
+  res.send('ok - CI/CD Tested')
 })
 const start = async () => {
   app.listen(PORT, () => {
@@ -22,3 +22,4 @@ const start = async () => {
 }
 
 start()
+
