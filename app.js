@@ -13,7 +13,8 @@ app.get('/version', (req, res) => {
 
 // Add a health check (good practice for CI/CD)
 app.get('/health', (req, res) => {
-  res.send('ok')
+  throw new Error('intentional crash')
+  // res.send('ok')
 })
 
 const start = async () => {
