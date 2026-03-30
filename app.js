@@ -13,10 +13,10 @@ app.get('/version', (req, res) => {
 
 // Add a health check (good practice for CI/CD)
 app.get('/health', (req, res) => {
+  // eslint-disable-next-line no-unused-vars
+  const _unused = { req, res }
   throw new Error('intentional crash')
-  // res.send('ok')
 })
-
 const start = async () => {
   app.listen(PORT, () => {
     console.log(`server started on port ${PORT}`)
