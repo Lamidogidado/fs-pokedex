@@ -1,5 +1,3 @@
-# enable workflow permission for write as well
-
 name: Deployment pipeline
 
 on:
@@ -31,7 +29,8 @@ jobs:
       - name: Run Playwright tests
         run: npm run test:e2e 
       - name: Trigger deployment
-        if: ${{ github.event_name == 'push' }}
+        # This ensures we only deploy when pushing to main, not on PRs
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         run: curl ${{ secrets.RENDER_DEPLOY_HOOK }}
 
   tag_release:
@@ -40,7 +39,8 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - name: Bump version and push tag
-        if: ${{ github.event_name == 'push' }}
+        # Only tag when pushing/merging to main
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         uses: anothrNick/github-tag-action@1.71.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
