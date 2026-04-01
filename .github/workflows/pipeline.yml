@@ -1,3 +1,5 @@
+# enable workflow permission for write as well
+
 name: Deployment pipeline
 
 on:
