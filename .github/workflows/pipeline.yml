@@ -13,10 +13,10 @@ jobs:
   simple_deployment_pipeline:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: '24'
+          node-version: '20'
       - name: Install dependencies
         run: npm install
       - name: Check style
@@ -29,19 +29,24 @@ jobs:
         run: npx playwright install --with-deps
       - name: Run Playwright tests
         run: npm run test:e2e 
+      
       - name: Trigger deployment
-        # This ensures we only deploy when pushing to main, not on PRs
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        # Only deploy if: 
+        # 1. It is a push to the main branch
+        # 2. The commit messages DO NOT contain #skip
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && !contains(join(github.event.commits.*.message, ' '), '#skip') }}
         run: curl ${{ secrets.RENDER_DEPLOY_HOOK }}
 
   tag_release:
     needs: [simple_deployment_pipeline]
     runs-on: ubuntu-latest
+    # Only run this job if:
+    # 1. It is a push to the main branch
+    # 2. The commit messages DO NOT contain #skip
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && !contains(join(github.event.commits.*.message, ' '), '#skip') }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
       - name: Bump version and push tag
-        # Only tag when pushing/merging to main
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         uses: anothrNick/github-tag-action@1.71.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
