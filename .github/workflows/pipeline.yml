@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - feature-test-pr
   pull_request:
     branches: [main]
     types: [opened, synchronize]
